@@ -10,7 +10,7 @@
 
 # ### step 0:installing the packages we need
 
-# In[6]:
+# In[1]:
 
 
 get_ipython().system('pip install mysql-connector')
@@ -20,7 +20,7 @@ get_ipython().system('pip install spacy')
 get_ipython().system('python -m spacy download it_core_news_sm')
 
 
-# In[7]:
+# In[2]:
 
 
 get_ipython().system('pip install treetaggerwrapper')
@@ -28,7 +28,7 @@ get_ipython().system('pip install treetaggerwrapper')
 
 # ### step 1: importing datasets and the libraries
 
-# In[2]:
+# In[3]:
 
 
 from tqdm import tqdm
@@ -39,7 +39,7 @@ from nltk import word_tokenize
 from nltk import trigrams, ngrams
 
 
-# In[3]:
+# In[4]:
 
 
 import string
@@ -48,7 +48,7 @@ myPunctation = myPunctation.replace('.', '')
 myPunctation
 
 
-# In[4]:
+# In[5]:
 
 
 from collections import defaultdict
@@ -56,14 +56,14 @@ import random
 sentence_list = []
 
 
-# In[5]:
+# In[6]:
 
 
 import mysql.connector
 from mysql.connector import (connection)
 
 
-# In[6]:
+# In[7]:
 
 
 mydb = connection.MySQLConnection(user='root', password='12345',
@@ -71,7 +71,7 @@ mydb = connection.MySQLConnection(user='root', password='12345',
                               database='mozart')
 
 
-# In[7]:
+# In[8]:
 
 
 mycursor = mydb.cursor()
@@ -81,7 +81,7 @@ for x in mo:
     print(x)
 
 
-# In[87]:
+# In[9]:
 
 
 mycursor = mydb.cursor()
@@ -92,7 +92,7 @@ mo = mycursor.fetchall()
     #print("\n")
 
 
-# In[9]:
+# In[10]:
 
 
 mycursor = mydb.cursor()
@@ -106,13 +106,13 @@ for row in lettera_tag:
 
 # ### 1.2 Normalization_NLP_Basics
 
-# In[10]:
+# In[11]:
 
 
 df = pd.DataFrame (lettera_tag, columns = ['lettera'])
 
 
-# In[11]:
+# In[12]:
 
 
 def clean_text(text):
@@ -137,7 +137,7 @@ def clean_text(text):
     return text
 
 
-# In[12]:
+# In[13]:
 
 
 def clean_text(text):
@@ -148,7 +148,7 @@ def clean_text(text):
     return text
 
 
-# In[13]:
+# In[14]:
 
 
 import re
@@ -159,7 +159,7 @@ df1
 
 # ### 1.3 Lemmatizing Italian sentences 
 
-# In[14]:
+# In[15]:
 
 
 import pandas as pd
@@ -168,20 +168,20 @@ nltk.download('punkt')
 df['tokenized_sents'] = df1.apply(lambda row: nltk.word_tokenize(row['lettera']), axis=1)
 
 
-# In[15]:
+# In[16]:
 
 
 df['tokenized_sents'] 
 
 
-# In[16]:
+# In[17]:
 
 
 # Using filter() method to filter nan values
 df =df['tokenized_sents'].dropna()
 
 
-# In[17]:
+# In[18]:
 
 
 df3=df.tolist()
@@ -206,7 +206,7 @@ d
 # 
 # NER systems are developed with various linguistic approaches, as well as statistical and machine learning methods. NER has many applications for project or business purposes.
 
-# In[22]:
+# In[25]:
 
 
 import spacy
@@ -216,7 +216,7 @@ import it_core_news_sm
 nlp=it_core_news_sm.load()
 
 
-# In[80]:
+# In[26]:
 
 
 ruler = nlp.add_pipe("entity_ruler")
@@ -227,34 +227,26 @@ a=[(ent.text, ent.label_) for ent in doc.ents]
 a
 
 
-# In[86]:
+# In[29]:
 
 
-displacy.render(text1,style="ent",jupyter=True)
+displacy.render(doc,style="ent",jupyter=True)
 
 
-# In[82]:
+# In[23]:
 
 
 df2 = pd.DataFrame (a, columns = ["text", "label"])
 df2
 
 
-# In[84]:
+# In[24]:
 
 
 # selecting rows based on condition 
 options = ['LOC','PER']   
 G = df2.loc[df2['label'].isin(options)] 
 G
-
-
-# ### 1.5 Sentiment Analysis
-
-# In[ ]:
-
-
-
 
 
 # In[ ]:
